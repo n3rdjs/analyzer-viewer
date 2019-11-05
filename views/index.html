@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        body>div {
+            text-align: center;
+            margin-top: 70px;
+        }
+
+        .page-navigation {
+            position: absolute;
+            top: 80px;
+            left: 70px;
+        }
+
+        .convert-sig {
+            position: absolute;
+            left: 10px;
+            top: 80px;
+        }
+
+        .search-box {
+            position: absolute;
+            right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <%
+        var params = '';
+        if (sig) params = params + '&sig=1'; 
+        if (search_str) params = params + '&search_str=' + encodeURI(search_str); 
+        if (search_type) params = params + '&search_type=' + encodeURI(search_type); 
+    %>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/?page=1">Analyzer</a>
+        <form method="GET" action="/" class="search-box form-inline my-2 my-lg-0">
+            <div class="input-group-prepend">
+                <select class="custom-select" id="inputGroupSelect01" name="search_type">
+                        <option value="module_name" selected>Module Name</option>
+                        <option value="result">Result</option>
+                </select>
+            </div>
+            <input type="hidden" name="page" value="1">
+            <input type="hidden" name="sig" value="<%= sig ? '1' : '' %>">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search_str" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </nav>
+    <% if (sig) { %>
+    <button onclick="location='/?page=1';" type="button" class="convert-sig btn btn-primary"><i
+            class="fa fa-star"></i></button>
+    <% } else { %>
+    <button onclick="location='/?page=1&sig=1';" type="button" class="convert-sig btn btn-secondary"><i
+            class="fa fa-star"></i></button>
+    <% } %>
+    <nav class="page-navigation" aria-label="...">
+        <ul class="pagination">
+            <li class="page-item<%= current_page <= 10 ? ' disabled' : '' %>">
+                <a class="page-link"
+                    href="/?page=<%= parseInt((current_page - 1) / 10) * 10 - 9 %><%= params %>">&laquo;</a>
+            </li>
+            <% for (let i = 1; i <= 10; ++i) {
+                var pag = parseInt((current_page - 1) / 10) * 10 + i;
+            %>
+            <li class="page-item<%= pag == current_page ? ' active' : '' %>"><a class="page-link"
+                    href="/?page=<%= pag %><%= params %>"><%= pag %></a></li>
+            <% } %>
+            <li class="page-item">
+                <a class="page-link"
+                    href="/?page=<%= parseInt((current_page - 1) / 10) * 10 + 11 %><%= params %>">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">name</th>
+                    <th scope="col">version</th>
+                    <th scope="col">pid</th>
+                    <th scope="col">pversion</th>
+                    <th scope="col">result</th>
+                    <th scope="col">status</th>
+                    <th scope="col">time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let row of result) { %><tr>
+                    <th scope="row"><%= row.id %></th>
+                    <td><%= row.module_name %></td>
+                    <td><%= row.module_version %></td>
+                    <td><%= row.pattern_id %></td>
+                    <td><%= row.pattern_version %></td>
+                    <td><%= row.result_str.trim() %></td>
+                    <td><%= row.result_code %></td>
+                    <td><%= row.scantime.toISOString().substr(5, 11).replace('-', '/').replace(/T/, ' ').replace(/\..+/, '') %>
+                    </td>
+                </tr><% } %>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
