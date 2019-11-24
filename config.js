@@ -1,8 +1,8 @@
 module.exports = {
     report_cred : {
-		host     : '13.124.226.128',
-		user     : 'n3rdjs',
+		host     : '52.78.108.68',
+		user     : 'nerdjs',
 		password : 'zxcdqwe123@',
-		database : 'analyze_report'
+		database : 'report'
 	}
 }

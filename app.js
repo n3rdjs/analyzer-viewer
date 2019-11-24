@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
     } else {
         var conn = mysql.createConnection(report_cred);
         conn.connect();
-        conn.query(`select * from report where ${sig ? "result_str != '0 0\n'" : '1'} and module_name like ? and result_str like ? order by id asc limit ?,?`, [ name_q, result_q, (page - 1) * 50, 50 ], (err, result, fields) => {
+        conn.query(`select * from proto_path2_v1 where ${sig ? "result != '0 0\n'" : '1'} and name like ? and result like ? order by id asc limit ?,?`, [ name_q, result_q, (page - 1) * 50, 50 ], (err, result, fields) => {
             if (err) throw err;
             conn.end();
             res.render('index', { result : result, current_page : page, sig : sig, search_str : search_str, search_type : search_type });

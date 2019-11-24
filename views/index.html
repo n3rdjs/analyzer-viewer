@@ -87,9 +87,6 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">name</th>
-                    <th scope="col">version</th>
-                    <th scope="col">pid</th>
-                    <th scope="col">pversion</th>
                     <th scope="col">result</th>
                     <th scope="col">status</th>
                     <th scope="col">time</th>
@@ -98,12 +95,9 @@
             <tbody>
                 <% for (let row of result) { %><tr>
                     <th scope="row"><%= row.id %></th>
-                    <td><%= row.module_name %></td>
-                    <td><%= row.module_version %></td>
-                    <td><%= row.pattern_id %></td>
-                    <td><%= row.pattern_version %></td>
-                    <td><%= row.result_str.trim() %></td>
-                    <td><%= row.result_code %></td>
+                    <td><%= row.name %></td>
+                    <td><pre><%= row.result.trim() %></pre></td>
+                    <td><%= row.status %></td>
                     <td><%= row.scantime.toISOString().substr(5, 11).replace('-', '/').replace(/T/, ' ').replace(/\..+/, '') %>
                     </td>
                 </tr><% } %>
