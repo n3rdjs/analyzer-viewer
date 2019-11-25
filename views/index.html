@@ -1,6 +1,44 @@
 <!DOCTYPE html>
 <html>
+<%
 
+function timeBefore(timestamp) {
+    var now = new Date();
+    var _date = new Date(timestamp);
+    var minus;
+    if (now.getFullYear() > _date.getFullYear()) {
+        minus = now.getFullYear() - _date.getFullYear();
+        return minus + "년 전";
+    } else if (now.getMonth() > _date.getMonth()) {
+        minus = now.getMonth() - _date.getMonth();
+        return minus + "달 전";
+    } else if (now.getDate() > _date.getDate()) {
+        minus = now.getDate() - _date.getDate();
+        return minus + "일 전";
+    } else if (now.getDate() == _date.getDate()) {
+        var nowTime = now.getTime();
+        var _datetime = _date.getTime();
+        if (nowTime > _datetime) {
+            sec = parseInt(nowTime - _datetime) / 1000;
+            day = parseInt(sec / 60 / 60 / 24);
+            sec = (sec - (day * 60 * 60 * 24));
+            hour = parseInt(sec / 60 / 60);
+            sec = (sec - (hour * 60 * 60));
+            min = parseInt(sec / 60);
+            sec = parseInt(sec - (min * 60));
+            if (hour > 0) {
+                return hour + "시간 전";
+            } else if (min > 0) {
+                return min + "분 전";
+            } else if (sec > 0) {
+                return sec + "초 전";
+            }
+        }
+    }
+    return '방금 전';
+}
+
+%>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -34,6 +72,7 @@
         }
     </style>
 </head>
+
 <body>
     <%
         var params = '';
@@ -46,13 +85,14 @@
         <form method="GET" action="/" class="search-box form-inline my-2 my-lg-0">
             <div class="input-group-prepend">
                 <select class="custom-select" id="inputGroupSelect01" name="search_type">
-                        <option value="module_name" selected>Module Name</option>
-                        <option value="result">Result</option>
+                    <option value="module_name" selected>Module Name</option>
+                    <option value="result">Result</option>
                 </select>
             </div>
             <input type="hidden" name="page" value="1">
             <input type="hidden" name="sig" value="<%= sig ? '1' : '' %>">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search_str" aria-label="Search">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search_str"
+                aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </nav>
@@ -96,9 +136,11 @@
                 <% for (let row of result) { %><tr>
                     <th scope="row"><%= row.id %></th>
                     <td><%= row.name %></td>
-                    <td><pre><%= row.result.trim() %></pre></td>
+                    <td>
+                        <pre><%= row.result.trim() %></pre>
+                    </td>
                     <td><%= row.status %></td>
-                    <td><%= row.scantime.toISOString().substr(5, 11).replace('-', '/').replace(/T/, ' ').replace(/\..+/, '') %>
+                    <td><%= timeBefore(row.scantime) %>
                     </td>
                 </tr><% } %>
             </tbody>
