@@ -3,7 +3,7 @@
 <%
 
 function timeBefore(timestamp) {
-    var now = new Date();
+    var now = new Date(Date.now() - 9*1000*60*60);
     var _date = new Date(timestamp);
     var minus;
     if (now.getFullYear() > _date.getFullYear()) {
