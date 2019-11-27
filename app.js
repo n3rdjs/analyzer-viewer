@@ -23,7 +23,14 @@ app.get('/', (req, res) => {
     }
 
     if (!page || page < 1) {
-        res.redirect('/?page=1');
+        var conn = mysql.createConnection(report_cred);
+        conn.connect();
+        conn.query(`select id from proto_path2_v1 where status = 0 limit 1`, (err, result, fields) => {
+            if (err) throw err;
+            conn.end();
+            let page = parseInt((result[0].id - 1) / 50) + 1;
+            res.redirect('/?page=' + page);
+        });
     } else {
         var conn = mysql.createConnection(report_cred);
         conn.connect();
