@@ -39,11 +39,11 @@ function timeBefore(timestamp) {
 }
 
 const result_text = {
-    0: 'NOT SCANNED YET',
-    1: 'BEING SCAN',
-    2: 'ERROR',
-    3: 'ERROR3',
-    10: 'COMPLETE'
+    0: '<span class="badge badge-dark">NOT SCANNED YET</span>',
+    1: '<span class="badge badge-secondary">BEING SCAN</span>',
+    2: '<span class="badge badge-warning">ERROR</span>',
+    3: '<span class="badge badge-danger">ERROR3</span>',
+    10: '<span class="badge badge-success">COMPLETE</span>'
 }
 
 %>
@@ -152,7 +152,7 @@ const result_text = {
                     <td><%= row.status > 1 ? row.execution_time + '초' : '' %></td>
                     <td><%= row.status > 1 ? timeBefore(row.scantime) : '' %></td>
                     <td><%= row.status ? row.cpu : '' %></td>
-                    <td><%= row.status ? result_text[row.status] : '' %></td>
+                    <td><%- row.status ? result_text[row.status] : '' %></td>
                 </tr><% } %>
             </tbody>
         </table>
