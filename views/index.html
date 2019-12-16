@@ -38,6 +38,14 @@ function timeBefore(timestamp) {
     return '방금 전';
 }
 
+const result_text = {
+    0: 'NOT SCANNED YET',
+    1: 'BEING SCAN',
+    2: 'ERROR',
+    3: 'ERROR3',
+    10: 'COMPLETE'
+}
+
 %>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -128,8 +136,10 @@ function timeBefore(timestamp) {
                     <th scope="col">#</th>
                     <th scope="col">name</th>
                     <th scope="col">result</th>
-                    <th scope="col">status</th>
+                    <th scope="col">exec_time</th>
                     <th scope="col">time</th>
+                    <th scope="col">pc</th>
+                    <th scope="col">status</th>
                 </tr>
             </thead>
             <tbody>
@@ -139,9 +149,10 @@ function timeBefore(timestamp) {
                     <td>
                         <pre><%= row.result.trim() %></pre>
                     </td>
-                    <td><%= row.status %></td>
-                    <td><%= timeBefore(row.scantime) %>
-                    </td>
+                    <td><%= row.status > 1 ? row.execution_time + '초' : '' %></td>
+                    <td><%= row.status > 1 ? timeBefore(row.scantime) : '' %></td>
+                    <td><%= row.status ? row.cpu : '' %></td>
+                    <td><%= row.status ? result_text[row.status] : '' %></td>
                 </tr><% } %>
             </tbody>
         </table>

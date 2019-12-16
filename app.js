@@ -42,4 +42,15 @@ app.get('/', (req, res) => {
     }
 });
 
-app.listen(8080);
+app.get('/stats', (req, res) => {
+    var conn = mysql.createConnection(report_cred);
+    conn.connect();
+    conn.query(`select scantime from proto_path2_v1 where status != 0 and id % 1000 = 0`, (err, result, fields) => {
+        if (err) throw err;
+        conn.end();
+        console.log(result.map(data => data.scantime))
+        res.render('stats', {data : JSON.stringify(result)});
+    });
+});
+
+app.listen(process.env.PORT || 8080);
